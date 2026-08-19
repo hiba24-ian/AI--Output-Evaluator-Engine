@@ -1,0 +1,16 @@
+[
+  {
+    "id": "TC001",
+    "prompt": "Explain Quantum Computing in simple terms.",
+    "model_output": "Quantum computing uses qubits to process complex data faster than classical computers.",
+    "expected_keywords": ["qubits", "classical computers", "faster"],
+    "min_length": 20
+  },
+  {
+    "id": "TC002",
+    "prompt": "Write a python function to add two numbers.",
+    "model_output": "def add(a, b): return a + b",
+    "expected_keywords": ["def", "return"],
+    "min_length": 15
+  }
+]
