@@ -1,3 +1,9 @@
+## Live Demo
+
+Try the deployed Streamlit dashboard: https://ai-output-evaluator-engine.onrender.com
+
+The free Render service may take a short time to wake up after inactivity.
+
 # AI Output Evaluator & QA Engine
 
 A reproducible Python project that evaluates sample model outputs against explicit test-case requirements, with JSON/Markdown reporting and an interactive Streamlit dashboard.
