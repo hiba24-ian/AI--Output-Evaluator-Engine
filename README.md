@@ -7,7 +7,8 @@ A reproducible Python project that evaluates sample model outputs against explic
 - **Expected keyword coverage:** checks whether required phrases appear in an output (case-insensitive).
 - **Minimum output length:** checks whether an output meets a configured character minimum.
 - **Pass/fail reporting:** records matched and missing keywords, individual check results, failure reasons, and the overall pass rate.
-- **JSON input and output:** reads test cases from `data/test_cases.json` and writes a report to `reports/evaluation_results.json`.
+- **JSON report:** saves structured results to `reports/evaluation_results.json`.
+- **Readable Markdown report:** creates `reports/evaluation_results.md` with a summary table, per-case status, keyword coverage, missing keywords, and failed checks.
 
 ## Important scope
 
@@ -54,7 +55,7 @@ Each item in the input JSON list must include:
 
 ## Example report
 
-The generated report includes total, passed, and failed test counts; pass rate; evaluation method; and per-case details. Reports are generated locally and are not committed automatically.
+The evaluator generates both a machine-readable JSON report and a human-readable Markdown report. The Markdown version includes overall metrics and a per-test breakdown. Reports are generated locally and are not committed automatically.
 
 ## Author
 
