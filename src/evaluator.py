@@ -56,11 +56,23 @@ class LLMEvaluator:
         """Return a deterministic evaluation result for one validated case."""
         self._validate_case(case, 0)
         output = case["model_output"]
-        keywords = case["expected_keywords"]
         output_folded = output.casefold()
-        found = [word for word in keywords if word.casefold() in output_folded]
-        missing = [word for word in keywords if word.casefold() not in output_folded]
-        score = len(found) / len(keywords) if keywords else 1.0
+
+        # Keep the first spelling of each keyword and report repeated entries.
+        unique_keywords = []
+        seen_keywords = set()
+        duplicate_keywords = []
+        for word in case["expected_keywords"]:
+            normalized = word.casefold()
+            if normalized in seen_keywords:
+                duplicate_keywords.append(word)
+            else:
+                seen_keywords.add(normalized)
+                unique_keywords.append(word)
+
+        found = [word for word in unique_keywords if word.casefold() in output_folded]
+        missing = [word for word in unique_keywords if word.casefold() not in output_folded]
+        score = len(found) / len(unique_keywords) if unique_keywords else 1.0
         length_passed = len(output) >= case["min_length"]
         keyword_passed = score >= self.keyword_threshold
         checks = {
@@ -75,6 +87,7 @@ class LLMEvaluator:
             "keyword_threshold": self.keyword_threshold,
             "matched_keywords": found,
             "missing_keywords": missing,
+            "duplicate_expected_keywords": duplicate_keywords,
             "output_length": len(output),
             "minimum_length": case["min_length"],
             "checks": checks,
