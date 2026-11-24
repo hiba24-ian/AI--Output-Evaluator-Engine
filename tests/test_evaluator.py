@@ -101,13 +101,13 @@ class EvaluatorTests(unittest.TestCase):
             "id": "WHITESPACE",
             "prompt": "Explain AI",
             "model_output": "  AI   learns   from data  ",
-            "expected_keywords": [" learn   from ", " DATA "],
+            "expected_keywords": [" learns   from ", " DATA "],
             "min_length": 19,
         }
         result = LLMEvaluator(self.input_path).evaluate_case(case)
 
         self.assertEqual(result["keyword_coverage"], 1.0)
-        self.assertEqual(result["matched_keywords"], ["learn from", "DATA"])
+        self.assertEqual(result["matched_keywords"], ["learns from", "DATA"])
         self.assertEqual(result["output_length"], 19)
         self.assertGreater(result["raw_output_length"], result["output_length"])
         self.assertTrue(result["passed"])
