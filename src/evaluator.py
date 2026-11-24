@@ -12,6 +12,11 @@ from typing import Any
 from src.utils import load_json_file, save_json_file
 
 
+def _normalize_whitespace(value: str) -> str:
+    """Trim a string and collapse repeated whitespace to single spaces."""
+    return " ".join(value.split())
+
+
 class LLMEvaluator:
     """Evaluate a JSON collection of test cases using explicit rules."""
 
@@ -55,25 +60,26 @@ class LLMEvaluator:
     def evaluate_case(self, case: dict[str, Any]) -> dict[str, Any]:
         """Return a deterministic evaluation result for one validated case."""
         self._validate_case(case, 0)
-        output = case["model_output"]
-        output_folded = output.casefold()
+        normalized_output = _normalize_whitespace(case["model_output"])
+        output_folded = normalized_output.casefold()
 
-        # Keep the first spelling of each keyword and report repeated entries.
+        # Trim keywords and collapse repeated spaces before matching.
         unique_keywords = []
         seen_keywords = set()
         duplicate_keywords = []
-        for word in case["expected_keywords"]:
-            normalized = word.casefold()
-            if normalized in seen_keywords:
-                duplicate_keywords.append(word)
+        for raw_word in case["expected_keywords"]:
+            word = _normalize_whitespace(raw_word)
+            normalized_word = word.casefold()
+            if normalized_word in seen_keywords:
+                duplicate_keywords.append(raw_word)
             else:
-                seen_keywords.add(normalized)
+                seen_keywords.add(normalized_word)
                 unique_keywords.append(word)
 
         found = [word for word in unique_keywords if word.casefold() in output_folded]
         missing = [word for word in unique_keywords if word.casefold() not in output_folded]
         score = len(found) / len(unique_keywords) if unique_keywords else 1.0
-        length_passed = len(output) >= case["min_length"]
+        length_passed = len(normalized_output) >= case["min_length"]
         keyword_passed = score >= self.keyword_threshold
         checks = {
             "keyword_coverage": keyword_passed,
@@ -88,7 +94,8 @@ class LLMEvaluator:
             "matched_keywords": found,
             "missing_keywords": missing,
             "duplicate_expected_keywords": duplicate_keywords,
-            "output_length": len(output),
+            "output_length": len(normalized_output),
+            "raw_output_length": len(case["model_output"]),
             "minimum_length": case["min_length"],
             "checks": checks,
             "failure_reasons": [
