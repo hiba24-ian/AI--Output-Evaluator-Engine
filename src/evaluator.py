@@ -16,8 +16,8 @@ class LLMEvaluator:
     """Evaluate a JSON collection of test cases using explicit rules."""
 
     def __init__(self, data_path: str | Path, keyword_threshold: float = 0.8):
-        if not isinstance(keyword_threshold, (int, float)):
-            raise TypeError("keyword_threshold must be a number.")
+        if isinstance(keyword_threshold, bool) or not isinstance(keyword_threshold, (int, float)):
+            raise TypeError("keyword_threshold must be a number (not a boolean).")
         if not 0.0 <= keyword_threshold <= 1.0:
             raise ValueError("keyword_threshold must be between 0.0 and 1.0.")
         self.data_path = Path(data_path)
