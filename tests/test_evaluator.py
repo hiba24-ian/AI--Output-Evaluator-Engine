@@ -96,6 +96,30 @@ class EvaluatorTests(unittest.TestCase):
         self.assertEqual(result["duplicate_expected_keywords"], ["LEARNs"])
         self.assertTrue(result["passed"])
 
+    def test_whitespace_is_normalized_before_keyword_matching(self):
+        case = {
+            "id": "WHITESPACE",
+            "prompt": "Explain AI",
+            "model_output": "  AI   learns   from data  ",
+            "expected_keywords": [" learn   from ", " DATA "],
+            "min_length": 19,
+        }
+        result = LLMEvaluator(self.input_path).evaluate_case(case)
+
+        self.assertEqual(result["keyword_coverage"], 1.0)
+        self.assertEqual(result["matched_keywords"], ["learn from", "DATA"])
+        self.assertEqual(result["output_length"], 19)
+        self.assertGreater(result["raw_output_length"], result["output_length"])
+        self.assertTrue(result["passed"])
+
+    def test_whitespace_only_expected_keyword_is_rejected(self):
+        bad_cases = [dict(self.cases[0], expected_keywords=["learn", "   "])]
+        bad_path = Path(self.temp_dir.name) / "blank-keyword.json"
+        bad_path.write_text(json.dumps(bad_cases), encoding="utf-8")
+
+        with self.assertRaises(ValueError):
+            LLMEvaluator(bad_path)
+
     def test_invalid_threshold_is_rejected(self):
         with self.assertRaises(ValueError):
             LLMEvaluator(self.input_path, keyword_threshold=1.5)
