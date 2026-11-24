@@ -80,6 +80,22 @@ class EvaluatorTests(unittest.TestCase):
         self.assertFalse(failing_result["checks"]["keyword_coverage"])
         self.assertFalse(failing_result["passed"])
 
+    def test_duplicate_expected_keywords_are_counted_once(self):
+        case = {
+            "id": "DUPLICATE_KEYWORDS",
+            "prompt": "Explain AI",
+            "model_output": "AI learns from data",
+            "expected_keywords": ["learns", "LEARNs", "data"],
+            "min_length": 1,
+        }
+        evaluator = LLMEvaluator(self.input_path, keyword_threshold=1.0)
+        result = evaluator.evaluate_case(case)
+
+        self.assertEqual(result["keyword_coverage"], 1.0)
+        self.assertEqual(result["matched_keywords"], ["learns", "data"])
+        self.assertEqual(result["duplicate_expected_keywords"], ["LEARNs"])
+        self.assertTrue(result["passed"])
+
     def test_invalid_threshold_is_rejected(self):
         with self.assertRaises(ValueError):
             LLMEvaluator(self.input_path, keyword_threshold=1.5)
