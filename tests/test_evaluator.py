@@ -65,6 +65,10 @@ class EvaluatorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             LLMEvaluator(self.input_path, keyword_threshold=1.5)
 
+    def test_boolean_threshold_is_rejected(self):
+        with self.assertRaises(TypeError):
+            LLMEvaluator(self.input_path, keyword_threshold=True)
+
     def test_invalid_case_is_rejected(self):
         bad_path = Path(self.temp_dir.name) / "bad.json"
         bad_path.write_text(json.dumps([{"id": "broken"}]), encoding="utf-8")
