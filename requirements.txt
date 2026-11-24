@@ -1,1 +1,3 @@
-# This project uses only the Python standard library.
+# Core evaluator uses only the Python standard library.
+# Install this optional dependency to run the interactive dashboard.
+streamlit>=1.35,<2.0
