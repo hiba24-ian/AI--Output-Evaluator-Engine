@@ -2,15 +2,65 @@
   {
     "id": "TC001",
     "prompt": "Explain Quantum Computing in simple terms.",
-    "model_output": "Quantum computing uses qubits to process complex data faster than classical computers.",
-    "expected_keywords": ["qubits", "classical computers", "faster"],
-    "min_length": 20
+    "model_output": "Quantum computing uses qubits to process certain problems differently from classical computers.",
+    "expected_keywords": [
+      "qubits",
+      "classical computers"
+    ],
+    "min_length": 35
   },
   {
     "id": "TC002",
-    "prompt": "Write a python function to add two numbers.",
-    "model_output": "def add(a, b): return a + b",
-    "expected_keywords": ["def", "return"],
+    "prompt": "Write a Python function to add two numbers.",
+    "model_output": "def add(a, b):\n    return a + b",
+    "expected_keywords": [
+      "def",
+      "return",
+      "a + b"
+    ],
+    "min_length": 15
+  },
+  {
+    "id": "TC003",
+    "prompt": "Explain why data quality matters in AI.",
+    "model_output": "Data quality matters because reliable, representative data helps AI systems produce more consistent results.",
+    "expected_keywords": [
+      "data quality",
+      "reliable",
+      "AI"
+    ],
+    "min_length": 30
+  },
+  {
+    "id": "TC004",
+    "prompt": "Give a concise safety reminder for handling personal data.",
+    "model_output": "Protect personal data by limiting access, using approved systems, and sharing only what is necessary.",
+    "expected_keywords": [
+      "personal data",
+      "limiting access",
+      "necessary"
+    ],
+    "min_length": 25
+  },
+  {
+    "id": "TC005",
+    "prompt": "Explain the purpose of testing an AI response.",
+    "model_output": "Testing checks whether an AI response follows the task requirements and avoids unsupported claims.",
+    "expected_keywords": [
+      "testing",
+      "requirements",
+      "unsupported claims"
+    ],
+    "min_length": 20
+  },
+  {
+    "id": "TC006",
+    "prompt": "Provide a short example of a missing requirement.",
+    "model_output": "The answer is brief but does not mention the requested deadline.",
+    "expected_keywords": [
+      "deadline",
+      "requested"
+    ],
     "min_length": 15
   }
 ]
