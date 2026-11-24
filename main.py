@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 from src.evaluator import LLMEvaluator
+from src.reporting import write_markdown_report
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -30,6 +31,8 @@ def main() -> int:
     try:
         evaluator = LLMEvaluator(args.input, keyword_threshold=args.threshold)
         summary = evaluator.run_evaluations(args.output)
+        markdown_path = Path(args.output).with_suffix(".md")
+        write_markdown_report(summary, markdown_path)
     except (OSError, ValueError, TypeError) as exc:
         print(f"Evaluation could not be completed: {exc}")
         return 1
@@ -39,7 +42,8 @@ def main() -> int:
     print(f"Passed: {summary['passed_tests']}")
     print(f"Failed: {summary['failed_tests']}")
     print(f"Pass rate: {summary['pass_rate']:.1%}")
-    print(f"Report saved to: {Path(args.output)}")
+    print(f"JSON report saved to: {Path(args.output)}")
+    print(f"Readable Markdown report saved to: {markdown_path}")
     return 0
 
 
